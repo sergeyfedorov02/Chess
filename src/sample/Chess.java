@@ -16,16 +16,17 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import sample.figures.Figure;
+import sample.figures.FigureKind;
 import sample.figures.Square;
 
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
 
-public class Chess extends Application {
+public class Chess extends Application implements LogicInterface {
     private static final String MyGame = "Шахматы";
     private final int size = 8;
-    private final Logic logic = new Logic();
+    private Logic logic;
     private Text status;
     private BorderPane borderPane;
 
@@ -172,15 +173,13 @@ public class Chess extends Application {
 
     @Override
     public void start(Stage stage) {
+        logic = new Logic(this);
         borderPane = new BorderPane();
-
-        //Установка цвета сцены(не используется, так как далее устанавливаем картинку на фон)
-        //border.setBackground(new Background(new BackgroundFill(Color.BURLYWOOD, CornerRadii.EMPTY, Insets.EMPTY)));
 
         //Установка изображения на задний фон сцены
         BackgroundImage myBI= new BackgroundImage(new Image("resources/WoodTwo.jpg",500,470,false,true),
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-                BackgroundSize.DEFAULT);
+                new BackgroundSize(0,0,false,false,true,true));
         borderPane.setBackground(new Background(myBI));
 
         var control = new VBox();
@@ -213,7 +212,7 @@ public class Chess extends Application {
 
         stage.setScene(new Scene(borderPane, 500, 470));
         stage.setTitle(MyGame);
-        stage.setResizable(false);
+        stage.setResizable(true);
         stage.show();
         this.refresh(borderPane);
 
@@ -253,6 +252,11 @@ public class Chess extends Application {
             }
         }
         return result;
+    }
+
+    @Override
+    public FigureKind getFigureToReplacePawn() {
+        return FigureKind.Rook;
     }
 }
 

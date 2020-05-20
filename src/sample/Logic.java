@@ -200,7 +200,10 @@ public class Logic {
         return null;
     }
 
-    public Logic() {
+    private final LogicInterface logicInterface;
+
+    public Logic(LogicInterface logicInterface) {
+        this.logicInterface = logicInterface;
         buildBlackTeam();
         buildWhiteTeam();
     }
@@ -275,13 +278,13 @@ public class Logic {
                 if (isWhiteTurn) {
                     if (end.y == 0) {
                         // превращение белой пешки
-                        newFigure = new QueenWhite(end);
+                        newFigure = createNewFigure(logicInterface.getFigureToReplacePawn(), true, end);
                     }
 
                 } else {
                     if (end.y == 7) {
                         // превращение черной пешки
-                        newFigure = new QueenBlack(end);
+                        newFigure = createNewFigure(logicInterface.getFigureToReplacePawn(), false, end);
                     }
                 }
             }
@@ -304,6 +307,19 @@ public class Logic {
 
         return true;
 
+    }
+
+    private Figure createNewFigure(FigureKind kind, boolean isWhite, Square square) {
+        switch (kind) {
+            case Rook:
+                return isWhite ? new RookWhite(square) : new RookBlack(square);
+            case Bishop:
+                return isWhite ? new BishopWhite(square) : new BishopBlack(square);
+            case Knight:
+                return isWhite ? new KnightWhite(square) : new KingBlack(square);
+            default:
+                return isWhite ? new QueenWhite(square) : new QueenBlack(square);
+        }
     }
 
     public void clean() {
