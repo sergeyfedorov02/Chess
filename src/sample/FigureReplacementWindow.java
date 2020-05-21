@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.Scene;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -25,6 +26,7 @@ public class FigureReplacementWindow {
 
         BorderPane pane = new BorderPane();
         pane.setBackground(new Background(new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY)));
+        window.getIcons().add(new Image("resources/GameIcon.jpg"));
 
         var control = new VBox();
         control.setPrefHeight(20);
@@ -71,7 +73,7 @@ public class FigureReplacementWindow {
 
         pane.setCenter(control);
 
-        Scene scene = new Scene(pane, 200, 200);
+        Scene scene = new Scene(pane, 250, 250);
         window.setScene(scene);
         window.setTitle(title);
         window.setResizable(false);

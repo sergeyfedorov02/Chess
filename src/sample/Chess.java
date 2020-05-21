@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -199,18 +200,18 @@ public class Chess extends Application implements LogicInterface {
         status.setFill(Color.WHITE);
         status.setFont(Font.font("Arial", FontWeight.BOLD, 15));
 
-        // Гениальное решение для отступа снизу
-        Text s = new Text(" ");
-
-        control.getChildren().addAll(status, start, s);
+        control.getChildren().addAll(status, start);
 
         borderPane.setBottom(control);
         borderPane.setCenter(this.buildGrid());
+        BorderPane.setMargin(control, new Insets(10,10,30,10));
 
         //Делаем иконку приложения
-        stage.getIcons().add(new Image("resources/GameIcon.png"));
+        stage.getIcons().add(new Image("resources/GameIcon.jpg"));
 
         stage.setScene(new Scene(borderPane, 500, 470));
+        stage.setMinHeight(510);
+        stage.setMinWidth(515);
         stage.setTitle(MyGame);
         stage.setResizable(true);
         stage.show();
