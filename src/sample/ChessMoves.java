@@ -14,6 +14,9 @@ public class ChessMoves {
     private  Square pawnSquareToTake; // поле для взятия на проходе
 
 
+    /**
+     Сбросить все ходы (начата новая партия)
+     */
     public void clear() {
         whiteKingMoved = false;
         blackKingMoved = false;
@@ -24,14 +27,23 @@ public class ChessMoves {
         pawnSquareToTake = null;
     }
 
+    /**
+     Получить поле на котором можно взять на проходе
+     */
     public Square getPawnSquareToTake() {
         return pawnSquareToTake;
     }
 
+    /**
+     Ходил король указанного цвета или нет
+     */
     public boolean isKingMoved(boolean isWhite) {
         return isWhite ? whiteKingMoved : blackKingMoved;
     }
 
+    /**
+     Ходила ладья указанного цвета или нет (isA = true если ладья по вртикали A, иначе по вертикали H)
+     */
     public boolean isRookMoved(boolean isWhite, boolean isA) {
         if (isWhite) {
             return isA ? whiteRookA1Moved : whiteRookH1Moved;
@@ -40,7 +52,12 @@ public class ChessMoves {
         return isA ? blackRookA8Moved : blackRookH8Moved;
     }
 
+    /**
+     Сделана рокировка
+     */
     public void addCasting(boolean isWhite, boolean isShort) {
+         // рокировка. больше одного раза рокироваться нельзя.
+        // запоминаем что король и ладья сделали ход
          pawnSquareToTake = null;
 
          if (isWhite) {
@@ -60,10 +77,33 @@ public class ChessMoves {
          }
     }
 
-    public void addMove(Figure figure, Square square) {
+    /**
+     Сделан очередной ход (removeFigure != null если при этом была съедена фигура)
+     */
+    public void addMove(Figure figure, Square square, Figure removeFigure) {
         pawnSquareToTake = null;
 
+        if(removeFigure != null && removeFigure.getKind() == FigureKind.Rook) {
+            // Если съедаем ладью, то рокировка невозможна в эту сторону даже если там будет другая ладья
+            if (removeFigure.isWhite()) {
+                if (removeFigure.position() == Square.A1) {
+                    whiteRookA1Moved = true;
+                } else if(removeFigure.position() == Square.H1) {
+                    whiteRookH1Moved = true;
+                }
+            }
+            else {
+                if (removeFigure.position() == Square.A8) {
+                    blackRookA8Moved = true;
+                } else if(removeFigure.position() == Square.H8) {
+                    blackRookH8Moved = true;
+                }
+            }
+        }
+
         if (figure.getKind() == FigureKind.Pawn) {
+            // Если пешка пошла на две клетки, то запоминаем поле через которое
+            // она перескочила. На следующем ходе на это поле можно сделать взятие на проходе
             if (figure.isWhite()) {
                 if (figure.position().y == 6 && square.y == 4) {
                     pawnSquareToTake = square.getDownSquare();
@@ -75,6 +115,7 @@ public class ChessMoves {
             }
         }
         else if (figure.getKind() == FigureKind.King) {
+            // Если король сделал ход,то рокировка невозможна в обе стороны
             if (figure.isWhite()) {
                 whiteKingMoved = true;
             }
@@ -83,6 +124,7 @@ public class ChessMoves {
             }
         }
         else if (figure.getKind() == FigureKind.Rook) {
+            // Если ладья сделала ход,то рокировка с ней невозможна
             if (figure.isWhite()) {
                 if (square == Square.H1) {
                     whiteRookH1Moved = true;

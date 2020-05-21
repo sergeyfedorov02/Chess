@@ -20,8 +20,6 @@ public class FigureReplacementWindow {
 
     public static FigureKind newWindow(String title) {
 
-        FigureKind figurekind = FigureKind.Queen;
-
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
 
@@ -50,11 +48,11 @@ public class FigureReplacementWindow {
 
         var group = new ToggleGroup();
 
-        var bishop = addButton("Слон", FigureKind.Bishop, group, 1.3);
-        var knight = addButton("Конь", FigureKind.Knight, group, 1.3);
-        var queen = addButton("Ферзь", FigureKind.Queen, group, 1.3);
+        var bishop = addButton("Слон", FigureKind.Bishop, group);
+        var knight = addButton("Конь", FigureKind.Knight, group);
+        var queen = addButton("Ферзь", FigureKind.Queen, group);
         queen.setSelected(true);
-        var rook = addButton("Ладья", FigureKind.Rook, group, 1.3);
+        var rook = addButton("Ладья", FigureKind.Rook, group);
 
         var closeButton = new Button("Подтвердить");
         closeButton.setOnMouseClicked(
@@ -82,12 +80,10 @@ public class FigureReplacementWindow {
         return (FigureKind) group.getSelectedToggle().getUserData();
     }
 
-    private static RadioButton addButton (String name, FigureKind figureKind, ToggleGroup group, double size) {
+    private static RadioButton addButton (String name, FigureKind figureKind, ToggleGroup group) {
         var figure = new RadioButton(name);
         figure.setUserData(figureKind);
         figure.setToggleGroup(group);
-        //figure.setScaleX(size);
-        //figure.setScaleY(size);
         return figure;
     }
 }

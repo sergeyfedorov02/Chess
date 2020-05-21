@@ -97,7 +97,7 @@ public class Logic {
         }
 
         //Ладья не должна была двигаться до совершения с ней рокировки
-        if (moves.isRookMoved(isWhite, false)) {
+        if (moves.isRookMoved(isWhite, rookStart == Square.A1)) {
             return null;
         }
 
@@ -289,7 +289,7 @@ public class Logic {
                 }
             }
 
-            moves.addMove(figure, end);
+            moves.addMove(figure, end, figureToTake);
 
             if (newFigure != null) {
                 // удаляем пешку и ставим новую фигуру на доску
