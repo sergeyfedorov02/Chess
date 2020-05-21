@@ -289,6 +289,8 @@ public class Logic {
                 }
             }
 
+            moves.addMove(figure, end);
+
             if (newFigure != null) {
                 // удаляем пешку и ставим новую фигуру на доску
                 chessPosition.removeFigure(figure);
@@ -298,8 +300,6 @@ public class Logic {
                 // перемещаем фигуру, которой был сделан ход в новую позицию
                 figure.move(end);
             }
-
-            moves.addMove(figure, end);
         }
 
         isWhiteTurn = !isWhiteTurn;
