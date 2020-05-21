@@ -256,7 +256,7 @@ public class Chess extends Application implements LogicInterface {
 
     @Override
     public FigureKind getFigureToReplacePawn() {
-        return FigureKind.Rook;
+        return FigureReplacementWindow.newWindow("Замена");
     }
 }
 
