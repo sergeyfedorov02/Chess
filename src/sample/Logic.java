@@ -210,6 +210,11 @@ public class Logic {
 
     public boolean move(Square start, Square end) {
 
+        if (status != GameStatus.ok) {
+            //Ход сделать нельзя, так как игра завершена
+            return false;
+        }
+
         var figure = getFigure(start);
 
         if (figure == null) {
