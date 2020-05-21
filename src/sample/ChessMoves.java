@@ -4,6 +4,9 @@ import sample.figures.Figure;
 import sample.figures.FigureKind;
 import sample.figures.Square;
 
+/**
+ Ходы в партии
+ */
 public class ChessMoves {
     private boolean whiteKingMoved;
     private boolean blackKingMoved;
