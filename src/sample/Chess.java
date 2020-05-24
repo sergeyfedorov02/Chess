@@ -1,7 +1,6 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -72,7 +71,7 @@ public class Chess extends Application implements LogicInterface {
                     var newY = yPos - size / 2;
 
                     // Проверка, чтобы мышкой нельзя было перетащить фигуру за край игральной доски
-                    if (xPos > 320 || xPos < 0 || yPos < 14 || yPos > 320)  {
+                    if (xPos > 306 || xPos < 0 || yPos < 14 || yPos > 320)  {
                         return;
                     }
                     rect.setX(newX);
@@ -152,40 +151,67 @@ public class Chess extends Application implements LogicInterface {
             }
         }
 
-
         // Делаем буквы у доски
-        Text letters = new Text("A       B       C       D       E       F       G       H");
-        letters.setX(17);
-        letters.setY(340);
-        letters.setFont(Font.font("Arial", FontWeight.BOLD, 15));
-        letters.setFill(Color.SANDYBROWN);
-        letters.setWrappingWidth(320);
-        panel.getChildren().add(letters);
+        panel.getChildren().addAll(buildLetters());
 
         // Делаем цифры у доски
-        Text digits = new Text("8\n\n7\n\n6\n\n5\n\n4\n\n3\n\n2\n\n1");
-        digits.setX(-20);
-        digits.setY(20);
-        digits.setFont(Font.font("Arial", FontWeight.BOLD, 18));
-        digits.setFill(Color.SANDYBROWN);
-        digits.setWrappingWidth(320);
-        panel.getChildren().add(digits);
+        panel.getChildren().addAll(buildDigits());
+
+        //Делаем статус игры и кнопку для рестарта игры
+        panel.getChildren().addAll(buildControlBox());
 
         return panel;
     }
 
-    @Override
-    public void start(Stage stage) {
-        logic = new Logic(this);
-        borderPane = new BorderPane();
+    private Text addLetterOrDigit (String item ) {
+        var name = new Text(String.format("%s", item));
+        name.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        name.setFill(Color.SANDYBROWN);
+        return name;
+    }
 
-        //Установка изображения на задний фон сцены
-        BackgroundImage myBI= new BackgroundImage(new Image("resources/WoodTwo.jpg",500,470,
-                false,true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-                new BackgroundSize(0,0,false,false,true,true));
-        borderPane.setBackground(new Background(myBI));
+    private HBox buildLetters(){
+        var lettersBox = new HBox();
+        Text A = addLetterOrDigit("A");
+        Text B = addLetterOrDigit("B");
+        Text C = addLetterOrDigit("C");
+        Text D = addLetterOrDigit("D");
+        Text E = addLetterOrDigit("E");
+        Text F = addLetterOrDigit("F");
+        Text G = addLetterOrDigit("G");
+        Text H = addLetterOrDigit("H");
+        lettersBox.setSpacing(25);
+        lettersBox.setAlignment(Pos.BOTTOM_CENTER);
+        lettersBox.setLayoutX(17);
+        lettersBox.setLayoutY(325);
 
+        lettersBox.getChildren().addAll(A, B, C, D, E, F, G, H);
+        return lettersBox;
+    }
+
+    private VBox buildDigits(){
+        var digitsBox = new VBox();
+        Text eight = addLetterOrDigit("8");
+        Text seven = addLetterOrDigit("7");
+        Text six = addLetterOrDigit("6");
+        Text five = addLetterOrDigit("5");
+        Text four = addLetterOrDigit("4");
+        Text three = addLetterOrDigit("3");
+        Text two = addLetterOrDigit("2");
+        Text one = addLetterOrDigit("1");
+        digitsBox.setSpacing(17);
+        digitsBox.setAlignment(Pos.CENTER);
+        digitsBox.setLayoutX(-18);
+        digitsBox.setLayoutY(8);
+
+        digitsBox.getChildren().addAll(eight, seven, six, five, four, three, two, one);
+        return digitsBox;
+    }
+
+    private VBox buildControlBox(){
         var control = new VBox();
+        control.setLayoutX(113);
+        control.setLayoutY(365);
 
         control.setPrefHeight(40);
         control.setSpacing(10.0);
@@ -204,16 +230,30 @@ public class Chess extends Application implements LogicInterface {
 
         control.getChildren().addAll(status, start);
 
-        borderPane.setBottom(control);
+        return control;
+    }
+
+
+    @Override
+    public void start(Stage stage) {
+        logic = new Logic(this);
+        borderPane = new BorderPane();
+
+        //Установка изображения на задний фон сцены
+        BackgroundImage myBI= new BackgroundImage(new Image("resources/WoodTwo.jpg",500,470,
+                false,true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                new BackgroundSize(0,0,false,false,true,true));
+        borderPane.setBackground(new Background(myBI));
+
+        //Добавим шахматную доску и статус игры, с активной кнопкой для обновления доски
         borderPane.setCenter(this.buildGrid());
-        BorderPane.setMargin(control, new Insets(10,10,30,10));
 
         //Делаем иконку приложения
         stage.getIcons().add(new Image("resources/GameIcon.jpg"));
 
-        stage.setScene(new Scene(borderPane, 500, 470));
-        stage.setMinHeight(510);
-        stage.setMinWidth(515);
+        stage.setScene(new Scene(borderPane, 510, 480));
+        stage.setMinHeight(520);
+        stage.setMinWidth(525);
         stage.setTitle(MyGame);
         stage.setResizable(true);
         stage.show();
