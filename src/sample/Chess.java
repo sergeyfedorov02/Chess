@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -157,9 +158,6 @@ public class Chess extends Application implements LogicInterface {
         // Делаем цифры у доски
         panel.getChildren().addAll(buildDigits());
 
-        //Делаем статус игры и кнопку для рестарта игры
-        panel.getChildren().addAll(buildControlBox());
-
         return panel;
     }
 
@@ -208,10 +206,18 @@ public class Chess extends Application implements LogicInterface {
         return digitsBox;
     }
 
-    private VBox buildControlBox(){
+    @Override
+    public void start(Stage stage) {
+        logic = new Logic(this);
+        borderPane = new BorderPane();
+
+        //Установка изображения на задний фон сцены
+        BackgroundImage myBI= new BackgroundImage(new Image("resources/WoodTwo.jpg",500,470,
+                false,true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                new BackgroundSize(0,0,false,false,true,true));
+        borderPane.setBackground(new Background(myBI));
+
         var control = new VBox();
-        control.setLayoutX(113);
-        control.setLayoutY(365);
 
         control.setPrefHeight(40);
         control.setSpacing(10.0);
@@ -230,23 +236,10 @@ public class Chess extends Application implements LogicInterface {
 
         control.getChildren().addAll(status, start);
 
-        return control;
-    }
-
-
-    @Override
-    public void start(Stage stage) {
-        logic = new Logic(this);
-        borderPane = new BorderPane();
-
-        //Установка изображения на задний фон сцены
-        BackgroundImage myBI= new BackgroundImage(new Image("resources/WoodTwo.jpg",500,470,
-                false,true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-                new BackgroundSize(0,0,false,false,true,true));
-        borderPane.setBackground(new Background(myBI));
-
         //Добавим шахматную доску и статус игры, с активной кнопкой для обновления доски
         borderPane.setCenter(this.buildGrid());
+        borderPane.setBottom(control);
+        BorderPane.setMargin(control, new Insets(10,10,30,10));
 
         //Делаем иконку приложения
         stage.getIcons().add(new Image("resources/GameIcon.jpg"));
