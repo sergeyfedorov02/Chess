@@ -16,9 +16,9 @@ import java.util.stream.Stream;
 
 public class Logic {
     private GameStatus status = GameStatus.ok;
-    private final ChessPosition chessPosition = new ChessPosition();
-    private final ChessMoves moves = new ChessMoves();
-    private boolean isWhiteTurn = true;
+    private final ChessPosition chessPosition;
+    private final ChessMoves moves;
+    private boolean isWhiteTurn;
 
     public boolean isWhiteTurn() {
         return this.isWhiteTurn;
@@ -80,7 +80,9 @@ public class Logic {
         return list.stream().allMatch(item -> getFigure(item) == null);
     }
 
-    //Метод для рокировки, который возвращает куда и какую ладью надо переместить
+    /**
+     * Метод для рокировки, который возвращает куда и какую ладью надо переместить
+    */
     private Pair<Figure,Square> getRookMoveInCastling(
             List<Square> noFiguresSquares, List<Square> noCheckSquares,
             boolean isWhite, Square rookStart, Square rookEnd) {
@@ -97,7 +99,9 @@ public class Logic {
         }
 
         //Ладья не должна была двигаться до совершения с ней рокировки
-        if (moves.isRookMoved(isWhite, rookStart == Square.A1)) {
+        var isShortCastling = noFiguresSquares.size() == 2;
+
+        if (moves.isRookMoved(isWhite, !isShortCastling)) {
             return null;
         }
 
@@ -202,10 +206,26 @@ public class Logic {
 
     private final LogicInterface logicInterface;
 
+    /**
+     Конструктор для создания исходной позиции
+     */
     public Logic(LogicInterface logicInterface) {
         this.logicInterface = logicInterface;
+        this.moves = new ChessMoves();
+        this.chessPosition= new ChessPosition();
+        this.isWhiteTurn = true;
         buildBlackTeam();
         buildWhiteTeam();
+    }
+
+    /**
+     Конструктор для тестов,чтобы начать с заданной позиции
+     */
+    Logic(LogicInterface logicInterface, ChessPosition position, ChessMoves moves, boolean isWhiteTurn) {
+        this.logicInterface = logicInterface;
+        this.chessPosition = position;
+        this.moves = moves;
+        this.isWhiteTurn = isWhiteTurn;
     }
 
     public boolean move(Square start, Square end) {
@@ -321,7 +341,7 @@ public class Logic {
             case Bishop:
                 return isWhite ? new BishopWhite(square) : new BishopBlack(square);
             case Knight:
-                return isWhite ? new KnightWhite(square) : new KingBlack(square);
+                return isWhite ? new KnightWhite(square) : new KnightBlack(square);
             default:
                 return isWhite ? new QueenWhite(square) : new QueenBlack(square);
         }
@@ -354,7 +374,7 @@ public class Logic {
     }
 
 
-    public boolean canFigureMoveWithNoCheckToKing (Figure figure) {
+    private boolean canFigureMoveWithNoCheckToKing (Figure figure) {
         // перебираем все клетки доски и ищем первую клетку куда можно поставить фигуру и защититься от шаха
         return Arrays.stream(Square.getAllSquares()).anyMatch(item -> {
             // можем ли защититься от шаха взятием на проходе
@@ -399,6 +419,10 @@ public class Logic {
             }
         }
         else {
+            //Проверяем. не осталось ли на доске только 2 короля(Ничья)
+            if (getAllFigures().size() == 2) {
+                status = GameStatus.draw;
+            }
             // проверяем нет ли пата. если ни одна фигура не может сделать допустимый ход, то это пат
             if (!canAnyFigureMoveWithNoCheckToKing()) {
                 status = GameStatus.stalemate;
@@ -427,6 +451,10 @@ public class Logic {
         return allFiguresOpponent.stream().anyMatch(item -> item.controlSquare(king.position(), copyPosition));
     }
 
+
+    ChessMoves getMoves() {
+        return moves;
+    }
 
     @Override
     public String toString() {

@@ -16,6 +16,39 @@ public class ChessMoves {
     private boolean blackRookH8Moved;
     private  Square pawnSquareToTake; // поле для взятия на проходе
 
+    public ChessMoves() {
+
+    }
+
+    ChessMoves whiteRookA1Moved() {
+        this.whiteRookA1Moved = true;
+        return this;
+    }
+
+    ChessMoves whiteRookH1Moved() {
+        this.whiteRookH1Moved = true;
+        return this;
+    }
+
+    ChessMoves blackRookA8Moved() {
+        this.blackRookA8Moved = true;
+        return this;
+    }
+
+    ChessMoves blackRookH8Moved() {
+        this.blackRookH8Moved = true;
+        return this;
+    }
+
+    ChessMoves whiteKingMoved() {
+        this.whiteKingMoved = true;
+        return this;
+    }
+
+    ChessMoves blackKingMoved() {
+        this.blackKingMoved = true;
+        return this;
+    }
 
     /**
      Сбросить все ходы (начата новая партия)

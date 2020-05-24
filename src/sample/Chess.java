@@ -109,6 +109,8 @@ public class Chess extends Application implements LogicInterface {
         }
         else if (gameStatus == GameStatus.checkmate){
             text = String.format("Мат %s. Игра закончена", this.logic.isWhiteTurn() ? "белым" : "черным");
+        } else if (gameStatus == GameStatus.draw){
+            text = "Ничья. Игра закончена";
         } else text = String.format("Последний ход %s привел к пату. Ничья.  Игра закончена.", !this.logic.isWhiteTurn() ? "белых" : "черных");
 
         // обновляем позицию фигур
@@ -178,8 +180,8 @@ public class Chess extends Application implements LogicInterface {
         borderPane = new BorderPane();
 
         //Установка изображения на задний фон сцены
-        BackgroundImage myBI= new BackgroundImage(new Image("resources/WoodTwo.jpg",500,470,false,true),
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+        BackgroundImage myBI= new BackgroundImage(new Image("resources/WoodTwo.jpg",500,470,
+                false,true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                 new BackgroundSize(0,0,false,false,true,true));
         borderPane.setBackground(new Background(myBI));
 

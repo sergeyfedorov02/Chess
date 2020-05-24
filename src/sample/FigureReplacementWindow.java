@@ -25,7 +25,7 @@ public class FigureReplacementWindow {
         window.initModality(Modality.APPLICATION_MODAL);
 
         BorderPane pane = new BorderPane();
-        pane.setBackground(new Background(new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY)));
+        pane.setBackground(new Background(new BackgroundFill(Color.SANDYBROWN, CornerRadii.EMPTY, Insets.EMPTY)));
         window.getIcons().add(new Image("resources/GameIcon.jpg"));
 
         var control = new VBox();

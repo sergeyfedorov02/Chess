@@ -27,13 +27,6 @@ public enum Square {
        return values();
     }
 
-    public List<Square> getAroundSquares() {
-        var result = new ArrayList<Square> (List.of(getUpSquare(), getDownSquare(), getRightSquare(), getLeftSquare(),
-                getRightUpSquare(), getLeftUpSquare(), getRightDownSquare(),getLeftDownSquare()));
-
-        return result.stream().filter(Objects::nonNull).collect(Collectors.toList());
-    }
-
     public Square getUpSquare() {
         return findBy(this.x, this.y - 1);
     }
