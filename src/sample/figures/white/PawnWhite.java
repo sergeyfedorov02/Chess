@@ -1,14 +1,11 @@
 package sample.figures.white;
 
-import sample.figures.ChessBoard;
-import sample.figures.Figure;
-import sample.figures.FigureKind;
-import sample.figures.Square;
+import sample.figures.*;
 
-public class PawnWhite extends FigureWhite {
+public class PawnWhite extends FigureBase {
 
     public PawnWhite(Square position) {
-        super(position, FigureKind.Pawn);
+        super(true, position, FigureKind.Pawn);
     }
 
     @Override

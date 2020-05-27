@@ -27,6 +27,9 @@ import java.util.stream.Collectors;
 public class Chess extends Application implements LogicInterface {
     private static final String MyGame = "Шахматы";
     private final int size = 8;
+    private final int singleSquareSize = 40;
+    private final int initialWindowSize = 510;
+    private final int ChessBoardSize = singleSquareSize * size;
     private Logic logic;
     private Text status;
     private BorderPane borderPane;
@@ -72,7 +75,8 @@ public class Chess extends Application implements LogicInterface {
                     var newY = yPos - size / 2;
 
                     // Проверка, чтобы мышкой нельзя было перетащить фигуру за край игральной доски
-                    if (xPos > 306 || xPos < 0 || yPos < 14 || yPos > 320)  {
+                    // установим эти координаты, исходя из размеров клетки = 40 и размеров все доски = 320
+                    if (xPos > 305 || xPos < 0 || yPos < 16 || yPos > ChessBoardSize)  {
                         return;
                     }
                     rect.setX(newX);
@@ -128,8 +132,8 @@ public class Chess extends Application implements LogicInterface {
          allFigures.forEach(item -> {
              var rect = this.figuresToRectangles.get(item);
              if (rect != null) {
-                 rect.setX((item.position().x*40+5));
-                 rect.setY((item.position().y*40+5));
+                 rect.setX((item.position().x*singleSquareSize+5));
+                 rect.setY((item.position().y*singleSquareSize+5));
              }
          });
 
@@ -147,7 +151,7 @@ public class Chess extends Application implements LogicInterface {
         for (int y = 0; y != this.size; y++) {
             for (int x = 0; x != this.size; x++) {
                 panel.getChildren().add(
-                        this.buildRectangle(x, y, 40, (x + y) % 2 == 0)
+                        this.buildRectangle(x, y, singleSquareSize, (x + y) % 2 == 0)
                 );
             }
         }
@@ -180,8 +184,10 @@ public class Chess extends Application implements LogicInterface {
         Text H = addLetterOrDigit("H");
         lettersBox.setSpacing(25);
         lettersBox.setAlignment(Pos.BOTTOM_CENTER);
-        lettersBox.setLayoutX(17);
-        lettersBox.setLayoutY(325);
+        //делаем отступ слева, который будет равен 2/5 клетки
+        lettersBox.setLayoutX(2 * singleSquareSize / 5);
+        // делаем отступ сверху, для этого берем размер все доски и делаем отступ вниз на 1/8 размера клекти доски
+        lettersBox.setLayoutY(ChessBoardSize + singleSquareSize / 5);
 
         lettersBox.getChildren().addAll(A, B, C, D, E, F, G, H);
         return lettersBox;
@@ -199,8 +205,8 @@ public class Chess extends Application implements LogicInterface {
         Text one = addLetterOrDigit("1");
         digitsBox.setSpacing(17);
         digitsBox.setAlignment(Pos.CENTER);
-        digitsBox.setLayoutX(-18);
-        digitsBox.setLayoutY(8);
+        digitsBox.setLayoutX(-singleSquareSize / 2); // делаем отступ от доски , равный половине размера клетки
+        digitsBox.setLayoutY(singleSquareSize / 5);//берем отступ сверху, который будет равен 1/8 размера клекти доски
 
         digitsBox.getChildren().addAll(eight, seven, six, five, four, three, two, one);
         return digitsBox;
@@ -212,7 +218,7 @@ public class Chess extends Application implements LogicInterface {
         borderPane = new BorderPane();
 
         //Установка изображения на задний фон сцены
-        BackgroundImage myBI= new BackgroundImage(new Image("resources/WoodTwo.jpg",500,470,
+        BackgroundImage myBI= new BackgroundImage(new Image("resources/WoodTwo.jpg",initialWindowSize,initialWindowSize,
                 false,true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                 new BackgroundSize(0,0,false,false,true,true));
         borderPane.setBackground(new Background(myBI));
@@ -244,9 +250,9 @@ public class Chess extends Application implements LogicInterface {
         //Делаем иконку приложения
         stage.getIcons().add(new Image("resources/GameIcon.jpg"));
 
-        stage.setScene(new Scene(borderPane, 510, 480));
-        stage.setMinHeight(520);
-        stage.setMinWidth(525);
+        stage.setScene(new Scene(borderPane, initialWindowSize, initialWindowSize));
+        stage.setMinHeight(initialWindowSize);
+        stage.setMinWidth(initialWindowSize);
         stage.setTitle(MyGame);
         stage.setResizable(true);
         stage.show();
@@ -268,8 +274,8 @@ public class Chess extends Application implements LogicInterface {
         Square position = figure.position();
 
         var shape = this.buildFigure(
-                position.x * 40 + 5,
-                position.y * 40 + 5,
+                position.x * singleSquareSize + 5,
+                position.y * singleSquareSize + 5,
                 30,
                 figure.icon()
         );
@@ -279,8 +285,8 @@ public class Chess extends Application implements LogicInterface {
 
     private Square findBy(double graphX, double graphY) {
         Square result = Square.A1;
-        int x = (int) graphX / 40;
-        int y = (int) graphY / 40;
+        int x = (int) graphX / singleSquareSize;
+        int y = (int) graphY / singleSquareSize;
         for (Square square : Square.values()) {
             if (square.x == x && square.y == y) {
                 result = square;

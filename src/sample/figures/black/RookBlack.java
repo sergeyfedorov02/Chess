@@ -1,19 +1,11 @@
 package sample.figures.black;
 
-import sample.figures.ChessBoard;
-import sample.figures.Figure;
-import sample.figures.FigureKind;
-import sample.figures.Square;
+import sample.figures.*;
 
-public class RookBlack extends FigureBlack {
+public class RookBlack extends Rook {
 
     public RookBlack(Square position) {
-        super(position, FigureKind.Rook);
-    }
-
-    @Override
-    public boolean controlSquare(Square square, ChessBoard chessBoard) {
-        return isValidRookMove(square,chessBoard);
+        super(position, false);
     }
 
     @Override

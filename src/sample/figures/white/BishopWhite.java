@@ -1,20 +1,11 @@
 package sample.figures.white;
 
-import sample.figures.ChessBoard;
-import sample.figures.Figure;
-import sample.figures.FigureKind;
-import sample.figures.Square;
+import sample.figures.*;
 
-public class BishopWhite extends FigureWhite {
+public class BishopWhite extends Bishop {
 
     public BishopWhite(Square position) {
-        super(position, FigureKind.Bishop);
-    }
-
-
-    @Override
-    public boolean controlSquare(Square square, ChessBoard chessBoard) {
-        return isValidBishopMove(square, chessBoard);
+        super(position, true);
     }
 
     @Override
